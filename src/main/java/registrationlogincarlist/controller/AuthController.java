@@ -1,5 +1,7 @@
 package registrationlogincarlist.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import registrationlogincarlist.dto.UserDto;
 import registrationlogincarlist.entity.User;
 import registrationlogincarlist.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -23,7 +26,8 @@ public class AuthController {
     }
 
     @GetMapping(value={"/index", "/", ""})
-    public String home(){
+    public String home(@AuthenticationPrincipal UserDetails userDetails, Model model){
+        model.addAttribute("user", userDetails);
         return "index";
     }
 
