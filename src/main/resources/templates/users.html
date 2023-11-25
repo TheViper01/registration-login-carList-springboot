@@ -39,6 +39,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Roles</th>
             </tr>
         </thead>
         <tbody>
@@ -46,6 +47,8 @@
                 <td th:text="${user.firstName}"></td>
                 <td th:text="${user.lastName}"></td>
                 <td th:text="${user.email}"></td>
+                <td th:text="${user.getRolesStr()}"></td>
+
             </tr>
         </tbody>
     </table>

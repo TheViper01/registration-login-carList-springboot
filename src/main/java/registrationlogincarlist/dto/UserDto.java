@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import registrationlogincarlist.entity.Role;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,4 +27,17 @@ public class UserDto
     private String email;
     @NotEmpty(message = "Password should not be empty")
     private String password;
+
+    private List<Role> roles = new ArrayList<>();
+
+    public String getRolesStr(){
+        StringBuilder res = new StringBuilder();
+        for (Role role:roles) {
+            res.append(role.getName()).append(",");
+        }
+        if (! res.isEmpty()){
+            res.delete(res.length()-1, res.length());
+        }
+        return res.toString();
+    }
 }
