@@ -2,8 +2,11 @@ package registrationlogincarlist.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import registrationlogincarlist.dto.CarDto;
 import registrationlogincarlist.dto.UserDto;
+import registrationlogincarlist.entity.Car;
 import registrationlogincarlist.entity.User;
+import registrationlogincarlist.service.CarService;
 import registrationlogincarlist.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -20,15 +23,24 @@ import java.util.List;
 public class AuthController {
 
     private UserService userService;
+    private CarService carService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, CarService carService) {
         this.userService = userService;
+        this.carService = carService;
     }
 
     @GetMapping(value={"/index", "/", ""})
     public String home(@AuthenticationPrincipal UserDetails userDetails, Model model){
         model.addAttribute("user", userDetails);
         return "index";
+    }
+
+    @GetMapping("/car-table")
+    public String carTable(Model model){
+        List<CarDto> cars = carService.findAllCars();
+        model.addAttribute("cars", cars);
+        return "car-table";
     }
 
     @GetMapping("/login")

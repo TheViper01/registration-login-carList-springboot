@@ -1,42 +1,43 @@
-package registrationlogincarlist.entity;
-import jakarta.persistence.*;
+package registrationlogincarlist.dto;
+
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import registrationlogincarlist.entity.User;
 
-@Setter
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name="cars")
-public class Car {
-    @Id
+public class CarDto {
+    @NotEmpty
     private String licensePlate;
 
-    @Column(nullable=false)
+    @NotEmpty
     private String brand;
-    @Column(nullable=false)
+    @NotEmpty
     private String model;
-    @Column(nullable=false)
+    @NotEmpty
     private String color;
-    @Column(nullable=false)
+    @NotEmpty
     private String manufactureYear;
-    @Column(nullable=false)
+    @NotEmpty
     private float engineCapacity;
-    @Column(nullable=false)
+    @NotEmpty
     private String fuel;
-    @Column(nullable=false)
+    @NotEmpty
     private float horsepower;
-    @Column(nullable=false)
+    @NotEmpty
     private float torque;
-    @Column(nullable=false)
+    @NotEmpty
     private float trunkVolume;
-    @Column(nullable=false)
+    @NotEmpty
     private float price;
-
-    @ManyToOne
-    @JoinColumn(name="user", nullable=false)
+    @NotEmpty
     private User user;
 }
