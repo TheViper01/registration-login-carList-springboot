@@ -23,24 +23,15 @@ import java.util.List;
 public class AuthController {
 
     private UserService userService;
-    private CarService carService;
 
-    public AuthController(UserService userService, CarService carService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.carService = carService;
     }
 
     @GetMapping(value={"/index", "/", ""})
     public String home(@AuthenticationPrincipal UserDetails userDetails, Model model){
         model.addAttribute("user", userDetails);
         return "index";
-    }
-
-    @GetMapping("/car-table")
-    public String carTable(Model model){
-        List<CarDto> cars = carService.findAllCars();
-        model.addAttribute("cars", cars);
-        return "car-table";
     }
 
     @GetMapping("/login")

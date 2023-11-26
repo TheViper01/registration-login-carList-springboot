@@ -13,6 +13,9 @@ import lombok.Setter;
 @Table(name="cars")
 public class Car {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column(nullable=false, unique=true)
     private String licensePlate;
 
     @Column(nullable=false)
@@ -22,7 +25,7 @@ public class Car {
     @Column(nullable=false)
     private String color;
     @Column(nullable=false)
-    private String manufactureYear;
+    private int manufactureYear;
     @Column(nullable=false)
     private float engineCapacity;
     @Column(nullable=false)

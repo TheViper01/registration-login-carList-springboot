@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import registrationlogincarlist.entity.Car;
 import registrationlogincarlist.entity.Role;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class UserDto
     private String password;
 
     private List<Role> roles = new ArrayList<>();
+    private List<Car> cars = new ArrayList<>();
 
     public String getRolesStr(){
         StringBuilder res = new StringBuilder();

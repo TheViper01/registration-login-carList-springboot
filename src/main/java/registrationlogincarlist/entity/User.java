@@ -43,5 +43,5 @@ public class User
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy="user")
-    private List<Car> cars;
+    private List<Car> cars = new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package registrationlogincarlist.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarDto {
+    private long id;
     @NotEmpty
     private String licensePlate;
 
@@ -24,20 +26,20 @@ public class CarDto {
     private String model;
     @NotEmpty
     private String color;
-    @NotEmpty
-    private String manufactureYear;
-    @NotEmpty
+
+    private int manufactureYear;
+
     private float engineCapacity;
-    @NotEmpty
+
     private String fuel;
-    @NotEmpty
+
     private float horsepower;
-    @NotEmpty
+
     private float torque;
-    @NotEmpty
+
     private float trunkVolume;
-    @NotEmpty
+
     private float price;
-    @NotEmpty
+
     private User user;
 }
