@@ -19,9 +19,21 @@ import registrationlogincarlist.utils.APIResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
+/*
 
+{
+        "dataOption":"all",
+        "searchCriteriaList":[
+        {
+        "filterKey":"licensePlate",
+        "operation":"eq",
+        "value":"GJ68CMVGGG"
+        }
+        ]
+        }
+*/
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 public class AdvSearchController {
 
     @Autowired
@@ -53,7 +65,7 @@ public class AdvSearchController {
         List<SearchCriteria> criteriaList = employeeSearchDto.getSearchCriteriaList();
         if(criteriaList != null){
             criteriaList.forEach(x-> {x.setDataOption(employeeSearchDto.getDataOption());
-                                        builder.with(x);
+                builder.with(x);
             });
 
         }
