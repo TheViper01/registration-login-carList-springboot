@@ -1,5 +1,8 @@
 package registrationlogincarlist.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import registrationlogincarlist.dto.CarDto;
 import registrationlogincarlist.entity.Car;
 import registrationlogincarlist.repository.CarRepository;
@@ -42,6 +45,12 @@ public class CarServiceImpl implements CarService {
         List<Car> cars = carRepository.findAll();
         return cars.stream().map((car) -> entityToDto(car))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CarDto> findBySearchCriteria(Specification<Car> spec, Pageable page){
+        Page<CarDto> searchResult = carRepository.findAll(spec, page).map(this::entityToDto);
+        return searchResult;
     }
 
     public CarDto entityToDto(Car car){
