@@ -18,6 +18,7 @@ import registrationlogincarlist.service.UserService;
 import registrationlogincarlist.utils.APIResponse;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1")
@@ -35,7 +36,8 @@ public class AdvSearchController {
     @GetMapping("/cars")
     public ResponseEntity<APIResponse> getAllEmployees(){
         APIResponse apiResponse = new APIResponse();
-        apiResponse.setData(carService.findAllCars());
+        apiResponse.setData(carService.findAllCars().stream().map((car) -> CarService.convertToDto(car))
+                .collect(Collectors.toList()));
         apiResponse.setMessage("Car record retrieved successfully");
         apiResponse.setResponseCode(HttpStatus.OK);
         return new ResponseEntity<>(apiResponse, apiResponse.getResponseCode());
@@ -58,7 +60,7 @@ public class AdvSearchController {
 
         Pageable page = PageRequest.of(pageNum, pageSize, Sort.by("id").descending());
 
-        Page<CarDto> employeePage = carService.findBySearchCriteria(builder.build(), page);
+        Page<CarDto> employeePage = carService.findBySearchCriteria(builder.build(), page).map(CarService::convertToDto);
 
         apiResponse.setData(employeePage.toList());
         apiResponse.setResponseCode(HttpStatus.OK);

@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.modelmapper.ModelMapper;
+import registrationlogincarlist.entity.Car;
 import registrationlogincarlist.entity.User;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +44,7 @@ public class CarDto {
 
     private float price;
 
-    private User user;
+    private long userId;
+
+
 }

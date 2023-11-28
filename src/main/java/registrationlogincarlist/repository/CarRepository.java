@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface CarRepository extends JpaRepository<Car, String>, JpaSpecificationExecutor<Car> {
     Car findByLicensePlate(String licensePlate);
     Car findById(long id);
+    void deleteById(long id);
+
 }

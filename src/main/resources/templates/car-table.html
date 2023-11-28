@@ -38,7 +38,7 @@
             <th>Torque</th>
             <th>Trunk Volume</th>
             <th>Price</th>
-            <th>User email</th>
+            <th>User id</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -56,7 +56,7 @@
             <td th:text="${car.torque}"></td>
             <td th:text="${car.trunkVolume}"></td>
             <td th:text="${car.price}"></td>
-            <td th:text="${car.user.email}"></td>
+            <td th:text="${car.userId}"></td>
             <td><a th:href="@{/car/edit/{id}(id=${car.id})}">Edit</a></td>
             <td><a th:href="@{/car/delete/{id}(id=${car.id})}">Delete</a></td>
 

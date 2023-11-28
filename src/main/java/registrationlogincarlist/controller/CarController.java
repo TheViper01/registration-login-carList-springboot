@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.text.ParseException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CarController {
@@ -31,7 +33,8 @@ public class CarController {
 
     @GetMapping("/car/view")
     public String carTable(Model model){
-        List<CarDto> cars = carService.findAllCars();
+        List<CarDto> cars = carService.findAllCars().stream().map((car) -> CarService.convertToDto(car))
+                .collect(Collectors.toList());
         model.addAttribute("cars", cars);
         return "car-table";
     }
@@ -39,14 +42,14 @@ public class CarController {
     @GetMapping("/car/edit/{id}")
     public String showEditCarForm(@PathVariable("id") long id, Model model) {
         Car car = carService.findById(id).orElseThrow(() -> new IllegalArgumentException("car id not found:" + id));
-        CarDto carUpdate = carService.entityToDto(car);
+        CarDto carUpdate = CarService.convertToDto(car);
         model.addAttribute("car", carUpdate);
         return "update-car";
     }
 
     @PostMapping("/car/update/{id}")
     public String updateCar(@PathVariable("id") long id, @Valid @ModelAttribute("car") CarDto carUpdate,
-                             BindingResult result, Model model) {
+                             BindingResult result, Model model) throws ParseException {
         if (result.hasErrors()) {
             model.addAttribute("car", carUpdate);
             return "update-car";
@@ -61,7 +64,7 @@ public class CarController {
                 return "update-car";
             }
         }
-        carUpdate.setUser(car.getUser());
+        carUpdate.setUserId(car.getUser().getId());
         carService.saveCar(carUpdate);
         return "redirect:/car/view";
     }
@@ -69,12 +72,12 @@ public class CarController {
     @GetMapping("/car/delete/{id}")
     public String deleteCar(@PathVariable("id") long id, Model model) {
         Car car = carService.findById(id).orElseThrow(() -> new IllegalArgumentException("car id not found:" + id));
-        carService.deleteCar(carService.entityToDto(car));
+        carService.deleteCar(car);
         return "redirect:/car/view";
     }
 
     @PostMapping("/car/add")
-    public String saveCar(@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("car") CarDto carUpdate, BindingResult result, Model model) {
+    public String saveCar(@AuthenticationPrincipal UserDetails userDetails, @Valid @ModelAttribute("car") CarDto carUpdate, BindingResult result, Model model) throws ParseException {
         if (result.hasErrors()) {
             model.addAttribute("car", carUpdate);
             return "add-car";
@@ -85,7 +88,7 @@ public class CarController {
             model.addAttribute("car", carUpdate);
             return "add-car";
         }
-        carUpdate.setUser(userService.findByEmail(userDetails.getUsername()));
+        carUpdate.setUserId(userService.findByEmail(userDetails.getUsername()).getId());
         carService.saveCar(carUpdate);
         return "redirect:/car/view";
     }

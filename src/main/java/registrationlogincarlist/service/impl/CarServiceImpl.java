@@ -1,14 +1,18 @@
 package registrationlogincarlist.service.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import registrationlogincarlist.dto.CarDto;
 import registrationlogincarlist.entity.Car;
+import registrationlogincarlist.entity.User;
 import registrationlogincarlist.repository.CarRepository;
+import registrationlogincarlist.repository.UserRepository;
 import registrationlogincarlist.service.CarService;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -17,18 +21,35 @@ import java.util.stream.Collectors;
 @Service
 public class CarServiceImpl implements CarService {
     private CarRepository carRepository;
+    private UserRepository userRepository;
 
-    public CarServiceImpl(CarRepository carRepository) {
+    public CarServiceImpl(CarRepository carRepository, UserRepository userRepository) {
         this.carRepository = carRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
-    public void saveCar(CarDto carDto) {
-        carRepository.save(dtoToEntity(carDto));
+    public void saveCar(Car car) {
+        carRepository.save(car);
     }
     @Override
-    public void deleteCar(CarDto carDto){
-        carRepository.delete(dtoToEntity(carDto));
+    public void saveCar(CarDto carDto) throws ParseException {
+        Car car = convertToEntity(carDto);
+        carRepository.save(car);
+    }
+    @Override
+    public void deleteCar(CarDto carDto) throws ParseException {
+        Car car = convertToEntity(carDto);
+        carRepository.delete(car);
+    }
+    @Override
+    public void deleteCar(Car car) {
+        carRepository.delete(car);
+    }
+
+    @Override
+    public void deleteCarById(long id) {
+        carRepository.deleteById(id);
     }
 
     @Override
@@ -41,18 +62,31 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDto> findAllCars() {
+    public List<Car> findAllCars() {
         List<Car> cars = carRepository.findAll();
-        return cars.stream().map((car) -> entityToDto(car))
-                .collect(Collectors.toList());
+        return cars;
     }
 
     @Override
-    public Page<CarDto> findBySearchCriteria(Specification<Car> spec, Pageable page){
-        Page<CarDto> searchResult = carRepository.findAll(spec, page).map(this::entityToDto);
+    public Page<Car> findBySearchCriteria(Specification<Car> spec, Pageable page){
+        //Page<CarDto> searchResult = carRepository.findAll(spec, page).map(this::entityToDto);
+        Page<Car> searchResult = carRepository.findAll(spec, page);
         return searchResult;
     }
 
+    public Car convertToEntity(CarDto carDto) throws ParseException {
+        ModelMapper modelMapper = new ModelMapper();
+        Car car = modelMapper.map(carDto, Car.class);
+        User user = userRepository.getById(carDto.getUserId());
+        if (user != null) {
+            car.setUser(user);
+        }
+        else{
+            throw new ParseException(String.format("User id not found! ID=%d", carDto.getUserId()), 13);
+        }
+        return car;
+    }
+/*
     public CarDto entityToDto(Car car){
         CarDto carDto = new CarDto();
         carDto.setId(car.getId());
@@ -89,4 +123,5 @@ public class CarServiceImpl implements CarService {
 
         return car;
     }
+ */
 }
