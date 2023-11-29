@@ -21,17 +21,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 /*
 
-{
-        "dataOption":"all",
-        "searchCriteriaList":[
-        {
-        "filterKey":"licensePlate",
-        "operation":"eq",
-        "value":"GJ68CMVGGG"
-        }
-        ]
-        }
+    {
+            "dataOption":"all",
+                "searchCriteriaList":[
+            {
+                "filterKey":"licensePlate",
+                "operation":"eq",
+                "value":"GJ68CMVGGG"
+            }]
+    }
 */
+@CrossOrigin(maxAge = 10)
 @RestController
 @RequestMapping("/api/v1")
 public class AdvSearchController {
@@ -57,7 +57,7 @@ public class AdvSearchController {
 
     @PostMapping("/cars/search")
     public ResponseEntity<APIResponse> searchEmployees(@RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-                                                       @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                       @RequestParam(name = "pageSize", defaultValue = "10000") int pageSize,
                                                        @RequestBody EmployeeSearchDto employeeSearchDto){
         System.out.println("employeeSearchDto:" + employeeSearchDto);
         APIResponse apiResponse = new APIResponse();
@@ -67,7 +67,6 @@ public class AdvSearchController {
             criteriaList.forEach(x-> {x.setDataOption(employeeSearchDto.getDataOption());
                 builder.with(x);
             });
-
         }
 
         Pageable page = PageRequest.of(pageNum, pageSize, Sort.by("id").descending());

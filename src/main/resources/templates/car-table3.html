@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration and Login System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar}"></div>
+
+<div class="container">
+    <div class="row">
+        <h1>Car List</h1>
+    </div>
+    <div class="form-group mb-3">
+        <form th:action="@{/car/new}">
+            <button class="btn btn-primary" type="submit">Add Car</button>
+        </form>
+    </div>
+
+    <div class="form-group mb-3">
+      <form th:action="@{/car/new}">
+          <button class="btn btn-primary" type="button" onclick='onLoadRoutine()'>Refresh</button>
+      </form>
+  </div>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark" id="thead">
+        </thead>
+        <tbody id="tbody">
+
+        </tbody>
+    </table>
+</div>
+</body>
+
+<script>
+
+    var getJSON = function(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'json';
+        xhr.onload = function() {
+          var status = xhr.status;
+          if (status === 200) {
+            callback(null, xhr.response);
+          } else {
+            callback(status, xhr.response);
+          }
+        };
+        xhr.send();
+    };
+
+
+    // Sending and receiving data in JSON format using POST method
+//
+
+var postGetJSON = function(url, jsonObj, responseCallback){
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) 
+      {
+        if(xhr.status === 200){
+          var jsonResponse = JSON.parse(xhr.responseText);
+          responseCallback(null, jsonResponse);
+        }
+        else{
+          responseCallback(xhr.status, xhr.responseText);
+        }
+      }
+  };
+  xhr.send(JSON.stringify(jsonObj));
+}
+
+
+        let createTable = (myBooks, theadId, tbodyId) => {
+          // Extract value from table header.
+          // ('Book ID', 'Book Name', 'Category' and 'Price')
+          let col = [];
+          for (let i = 0; i < myBooks.length; i++) {
+            for (let key in myBooks[i]) {
+              if (col.indexOf(key) === -1) {
+                col.push(key);
+              }
+            }
+          }
+
+          col.push("edit");
+          col.push("delete");
+
+
+          // Create table.
+          const thead = document.getElementById(theadId);
+          const tbody = document.getElementById(tbodyId);
+
+          thead.innerHTML = '';
+          tbody.innerHTML = '';
+          //const table = document.createElement("table");
+
+          // Create table header row using the extracted headers above.
+          let tr = thead.insertRow(-1);                   // table row.
+
+          for (let i = 0; i < col.length; i++) {
+            let th = document.createElement("th");      // table header.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+          }
+
+          // add json data to the table as rows.
+          for (let i = 0; i < myBooks.length; i++) {
+
+            tr = tbody.insertRow(-1);
+
+            for (let j = 0; j < col.length-2; j++) {
+              let tabCell = tr.insertCell(-1);
+              tabCell.innerHTML = myBooks[i][col[j]];
+            }
+            let tabCell = tr.insertCell(-1);
+            tabCell.innerHTML =  '<a href="http://localhost:8081/car/edit/'+myBooks[i].userId+'">edit</a>';
+              tabCell = tr.insertCell(-1);
+              tabCell.innerHTML =  '<a href="http://localhost:8081/car/delete/'+myBooks[i].userId+'">delete</a>';
+          }
+        }
+
+
+        var loadFullTable = function(){
+      getJSON('http://localhost:8081/api/v1/cars',
+      function(err, data) {
+        if (err !== null) {
+          alert('Something went wrong: ' + err);
+        } else {
+          //alert(JSON.stringify(data));
+          createTable(data.data, "thead", "tbody");
+        }
+      });
+    }
+
+    var onLoadRoutine = function(){
+      var allCarsSearchCriteria = {"dataOption": "all"};
+      allCarsSearchCriteria = {
+            "dataOption":"all",
+                "searchCriteriaList":[
+            {
+                "filterKey":"licensePlate",
+                "operation":"eq",
+                "value":"GJ68CMVGGG"
+            }]
+    };
+      postGetJSON("http://localhost:8081/api/v1/cars/search", allCarsSearchCriteria, function(err, data){
+        if (err !== null) {
+          alert('Something went wrong: ' + err);
+        } else {
+          //alert(JSON.stringify(data));
+          createTable(data.data, "thead", "tbody");
+        }
+      });
+    }
+
+    //document.onload = onLoadRoutine;
+</script>
+
+</html>
