@@ -36,7 +36,7 @@ public class CarController {
         List<CarDto> cars = carService.findAllCars().stream().map((car) -> CarService.convertToDto(car))
                 .collect(Collectors.toList());
         model.addAttribute("cars", cars);
-        return "car-table";
+        return "car-table2";
     }
 
     @GetMapping("/car/edit/{id}")

@@ -24,12 +24,6 @@
         </form>
     </div>
 
-    <div class="form-group mb-3">
-      <form>
-          <button class="btn btn-primary" type="button" onclick='onLoadRoutine()'>Refresh</button>
-      </form>
-    </div>
-
     <table class="table table-striped table-bordered table-hover">
       <thead class="table-dark" id="thead_filter">
         <tr>
@@ -42,7 +36,7 @@
       <tbody id="tbody_filter">
         <tr>
           <td>
-            <select name="filter_column" id="filter_column_select">
+            <select name="filter_column" id="filter_column_select" onchange="routineFilterColumnOnChange();">
               <option value="id">id</option>
               <option value="licensePlate">licensePlate</option>
               <option value="brand">brand</option>
@@ -114,30 +108,32 @@
 
   var addCarFilter = function(filtes, filter){
     filtes.searchCriteriaList.push(filter)
-  }
+  };
 
   var clearCarFilters = function(filtes){
     filtes.searchCriteriaList = [];
-  }
+  };
 
   var clearCarFilter = function(filtes, index){
     filtes.searchCriteriaList.splice(index, 1);
-  }
+  };
 
   var routineClearCarFilter = function(index){
     clearCarFilter(carFilters, index);
     routineRefreshCarFilters();
-  }
+    routineRefrshCarTable();
+  };
 
   var routineClearCarFilters = function(){
     routineClearCarFiltersTable();
     clearCarFilters(carFilters);
-  }
+    routineRefrshCarTable();
+  };
 
   var routineClearCarFiltersTable = function(){
     const thead = document.getElementById("car_filters");
     thead.innerHTML = '';
-  }
+  };
 
   var routineAddCarFilter = function(){
     addCarFilter(carFilters, {
@@ -146,6 +142,16 @@
                 "value": document.querySelector('#filter_condition_data').value
             });
     routineRefreshCarFilters();
+    routineRefrshCarTable();
+  };
+
+  var routineRefreshCarFilters = function(){
+    routineClearCarFiltersTable();
+    loadCarFiltersTable("car_filters", carFilters);
+  };
+
+
+  var routineRefrshCarTable = function(){
     postGetJSON("http://localhost:8081/api/v1/cars/search", carFilters, function(err, data){
         if (err !== null) {
           alert('Something went wrong: ' + err);
@@ -154,11 +160,6 @@
           createTable(data.data, "thead", "tbody");
         }
       });
-  }
-
-  var routineRefreshCarFilters = function(){
-    routineClearCarFiltersTable();
-    loadCarFiltersTable("car_filters", carFilters);
   }
 
 
@@ -180,7 +181,7 @@
 
       tabCell.innerHTML = '<button class="btn btn-primary" type="button" onclick="routineClearCarFilter('+i+')">delete</button>';
     }
-  }
+  };
 
     var getJSON = function(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -218,7 +219,7 @@ var postGetJSON = function(url, jsonObj, responseCallback){
       }
   };
   xhr.send(JSON.stringify(jsonObj));
-}
+};
 
 
         let createTable = (myBooks, theadId, tbodyId) => {
@@ -268,7 +269,7 @@ var postGetJSON = function(url, jsonObj, responseCallback){
               tabCell = tr.insertCell(-1);
               tabCell.innerHTML =  '<a href="http://localhost:8081/car/delete/'+myBooks[i].userId+'">delete</a>';
           }
-        }
+        };
 
 
         var loadFullTable = function(){
@@ -281,9 +282,10 @@ var postGetJSON = function(url, jsonObj, responseCallback){
           createTable(data.data, "thead", "tbody");
         }
       });
-    }
+    };
 
     var onLoadRoutine = function(){
+    routineFilterColumnOnChange();
     postGetJSON("http://localhost:8081/api/v1/cars/search", carFilters, function(err, data){
         if (err !== null) {
           alert('Something went wrong: ' + err);
@@ -292,7 +294,53 @@ var postGetJSON = function(url, jsonObj, responseCallback){
           createTable(data.data, "thead", "tbody");
         }
       });
+    };
+
+    var routineFilterColumnOnChange = function(){
+      const filterColumn = document.querySelector('#filter_column_select').value;
+      var inputData = document.querySelector('#filter_condition_data');
+      switch (filterColumn) {
+        case 'id':
+          inputData.type = "number";
+          break;
+          case 'licensePlate':
+          inputData.type = "text";
+          break;
+          case 'brand':
+          inputData.type = "text";
+          break;
+          case 'model':
+          inputData.type = "text";
+          break;
+          case 'color':
+          inputData.type = "text";
+          break;
+          case 'manufactureYear':
+          inputData.type = "text";
+          break;
+          case 'fuel':
+          inputData.type = "text";
+          break;
+          case 'horsepower':
+          inputData.type = "number";
+          break;
+          case 'torque':
+          inputData.type = "number";
+          break;
+          case 'trunkVolume':
+          inputData.type = "number";
+          break;
+          case 'price':
+          inputData.type = "number";
+          break;
+          case 'userId':
+          inputData.type = "number";
+          break;
+        default:
+          inputData.type = "text";
+      }
     }
+
 </script>
 
 </html>
