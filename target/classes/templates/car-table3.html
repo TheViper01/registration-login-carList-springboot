@@ -75,6 +75,7 @@
               <option value="le">LESS_THAN_EQUAL</option>
             </select>
           </td>
+
         <td>
           <div class="form-group mb-3">
             <input class="form-control" type="text" id="filter_condition_data" placeholder="filter_condition_data">
@@ -84,13 +85,14 @@
         <td>
           <div class="form-group mb-3">
             <form th:action="@{/car/new}">
-                <button class="btn btn-primary" type="button" onclick='routineAddCarFilter()'>Add filter</button>
+                <button class="btn btn-primary" type="button" onclick=''>Add filter</button>
             </form>
           </div>
         </td>
+
+
+
         </tr>
-        <tbody id="car_filters">
-        </tbody>
       </tbody>
     </table>
 
@@ -104,83 +106,6 @@
 <body onload="onLoadRoutine();"></body>
 
 <script>
-
-  var carFilters = {
-            "dataOption":"all",
-                "searchCriteriaList":[
-            ]
-    };
-  
-
-  var addCarFilter = function(filtes, filter){
-    filtes.searchCriteriaList.push(filter)
-  }
-
-  var clearCarFilters = function(filtes){
-    filtes.searchCriteriaList = [];
-  }
-
-  var clearCarFilter = function(filtes, index){
-    filtes.searchCriteriaList.splice(index, 1);
-  }
-
-  var routineClearCarFilter = function(index){
-    clearCarFilter(carFilters, index);
-    routineRefreshCarFilters();
-  }
-
-  var routineClearCarFilters = function(){
-    routineClearCarFiltersTable();
-    clearCarFilters(carFilters);
-  }
-
-  var routineClearCarFiltersTable = function(){
-    const thead = document.getElementById("car_filters");
-    thead.innerHTML = '';
-  }
-
-  var routineAddCarFilter = function(){
-    addCarFilter(carFilters, {
-                "filterKey": document.querySelector('#filter_column_select').value,
-                "operation": document.querySelector('#filter_condition_select').value,
-                "value": document.querySelector('#filter_condition_data').value
-            });
-    routineRefreshCarFilters();
-    postGetJSON("http://localhost:8081/api/v1/cars/search", carFilters, function(err, data){
-        if (err !== null) {
-          alert('Something went wrong: ' + err);
-        } else {
-          //alert(JSON.stringify(data));
-          createTable(data.data, "thead", "tbody");
-        }
-      });
-  }
-
-  var routineRefreshCarFilters = function(){
-    routineClearCarFiltersTable();
-    loadCarFiltersTable("car_filters", carFilters);
-  }
-
-
-
-  var loadCarFiltersTable = function(filters_div_id, filters){
-    const filtersTable = document.getElementById(filters_div_id);
-
-    // add json data to the table as rows.
-    for (let i = 0; i < filters.searchCriteriaList.length; i++) {
-
-      let tr = filtersTable.insertRow(-1);
-      let tabCell = tr.insertCell(-1);
-      tabCell.innerHTML = filters.searchCriteriaList[i].filterKey;
-      tabCell = tr.insertCell(-1);
-      tabCell.innerHTML = filters.searchCriteriaList[i].operation;
-      tabCell = tr.insertCell(-1);
-      tabCell.innerHTML = filters.searchCriteriaList[i].value;
-      tabCell = tr.insertCell(-1);
-
-      tabCell.innerHTML = '<button class="btn btn-primary" type="button" onclick="routineClearCarFilter('+i+')">delete</button>';
-    }
-  }
 
     var getJSON = function(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -284,7 +209,17 @@ var postGetJSON = function(url, jsonObj, responseCallback){
     }
 
     var onLoadRoutine = function(){
-    postGetJSON("http://localhost:8081/api/v1/cars/search", carFilters, function(err, data){
+      var allCarsSearchCriteria = {"dataOption": "all"};
+      /*allCarsSearchCriteria = {
+            "dataOption":"all",
+                "searchCriteriaList":[
+            {
+                "filterKey":"licensePlate",
+                "operation":"eq",
+                "value":"GJ68CMVGGG"
+            }]
+    };*/
+      postGetJSON("http://localhost:8081/api/v1/cars/search", allCarsSearchCriteria, function(err, data){
         if (err !== null) {
           alert('Something went wrong: ' + err);
         } else {

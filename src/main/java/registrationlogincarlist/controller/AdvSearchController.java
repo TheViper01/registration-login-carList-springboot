@@ -12,7 +12,6 @@ import registrationlogincarlist.advSearch.EmpSpecificationBuilder;
 import registrationlogincarlist.advSearch.EmployeeSearchDto;
 import registrationlogincarlist.advSearch.SearchCriteria;
 import registrationlogincarlist.dto.CarDto;
-import registrationlogincarlist.entity.Car;
 import registrationlogincarlist.service.CarService;
 import registrationlogincarlist.service.UserService;
 import registrationlogincarlist.utils.APIResponse;
