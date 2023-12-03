@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import registrationlogincarlist.dto.CarDto;
 import registrationlogincarlist.entity.Car;
 import registrationlogincarlist.entity.User;
@@ -19,6 +21,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class CarServiceImpl implements CarService {
     private CarRepository carRepository;
     private UserRepository userRepository;
