@@ -8,6 +8,6 @@ Start your mysql server and create a database called "login_system".
 To change the server database url or database name, edit the file "src/main/resources/application.properties".
 
 
-Default admin user:
-username: admin
-password: admin
+Default admin user:<br/>
+username: admin<br/>
+password: admin<br/>
