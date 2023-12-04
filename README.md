@@ -9,7 +9,6 @@ Default user account:<br/>
 username: user<br/>
 password: user<br/>
 <br/>
-<br/>
 Default admin account:<br/>
 username: admin<br/>
 password: admin<br/>
