@@ -82,7 +82,7 @@ public class AuthController {
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws InterruptedException {
         //TimeUnit.SECONDS.sleep(10);
-        System.out.println("Added admin account!");
+        System.out.println("Added admin and user account!");
         UserDto userDto = new UserDto();
         userDto.setFirstName("admin");
         userDto.setLastName("admin");
@@ -96,5 +96,19 @@ public class AuthController {
         User user = userService.findByEmail("admin");
         userService.addRole(user.getId(), userService.checkRoleExist("ROLE_USER"));
         userService.addRole(user.getId(), userService.checkRoleExist("ROLE_ADMIN"));
+
+
+        userDto = new UserDto();
+        userDto.setFirstName("user");
+        userDto.setLastName("user");
+        userDto.setEmail("user");
+        userDto.setPassword("user");
+        existing = userService.findByEmail(userDto.getEmail());
+        if (existing == null) {
+            userService.saveUser(userDto);
+        }
+
+        user = userService.findByEmail("user");
+        userService.addRole(user.getId(), userService.checkRoleExist("ROLE_USER"));
     }
 }
