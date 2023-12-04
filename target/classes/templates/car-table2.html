@@ -47,8 +47,8 @@
           </td>
           <td>
             <select name="filter_condition" id="filter_condition_select">
-              <option value="eq">EQUAL</option>
-              <option value="ne">NOT_EQUAL</option>
+              <option value="eq">=</option>
+              <option value="ne">!=</option>
               <option value="cn">CONTAINS</option>
               <option value="nc">DOES_NOT_CONTAIN</option>
               <option value="bw">BEGINS_WITH</option>
@@ -57,10 +57,10 @@
               <option value="en">DOES_NOT_END_WITH</option>
               <option value="nu">NUL</option>
               <option value="nn">NOT_NULL</option>
-              <option value="gt">GREATER_THAN</option>
-              <option value="ge">GREATER_THAN_EQUAL</option>
-              <option value="lt">LESS_THAN</option>
-              <option value="le">LESS_THAN_EQUAL</option>
+              <option value="gt">	&gt;</option>
+              <option value="ge">&gt;=</option>
+              <option value="lt">&lt;</option>
+              <option value="le">&lt;=</option>
             </select>
           </td>
         <td>
@@ -179,7 +179,7 @@
       tabCell.innerHTML = filters.searchCriteriaList[i].value;
       tabCell = tr.insertCell(-1);
 
-      tabCell.innerHTML = '<button class="btn btn-primary" type="button" onclick="routineClearCarFilter('+i+')">delete</button>';
+      tabCell.innerHTML = '<button class="btn btn-primary" type="button" onclick="routineClearCarFilter('+ i +')">delete</button>';
     }
   };
 
@@ -265,9 +265,9 @@ var postGetJSON = function(url, jsonObj, responseCallback){
               tabCell.innerHTML = myBooks[i][col[j]];
             }
             let tabCell = tr.insertCell(-1);
-            tabCell.innerHTML =  '<a href="/car/edit/'+myBooks[i].userId+'">edit</a>';
+            tabCell.innerHTML =  '<a href="/car/edit/'+ myBooks[i].id + '">edit</a>';
               tabCell = tr.insertCell(-1);
-              tabCell.innerHTML =  '<a href="/car/delete/'+myBooks[i].userId+'">delete</a>';
+              tabCell.innerHTML =  '<a href="/car/delete/' + myBooks[i].id+'">delete</a>';
           }
         };
 
